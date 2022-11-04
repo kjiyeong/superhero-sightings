@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Superhero Sightings Project</title>
+  </head>
+  <body>
+    <!-- Main Body of Page -->      
+       
+        <div class="container">
+            <div class="row m-4">
+                <div class="col text-center border border-dark">
+                    <h1><a href="/" class="text-dark">Superhero Sightings Project</a></h1>
+                </div>
+            </div>
+        
+            <!-- MENU -->
+            <div class="row m-4 border border-dark">
+                <div class="col text-center m-3">
+                    <a href="heroes" class="btn btn-outline-primary btn-lg">Heroes</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="powers" class="btn btn-outline-primary btn-lg">Powers</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="locations" class="btn btn-outline-primary btn-lg">Locations</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="organizations" class="btn btn-outline-primary btn-lg">Organizations</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="sightings" class="btn btn-outline-primary btn-lg">Sightings</a>
+                </div>
+            </div>
+            
+            <div class="row m-4">
+                <div class="col text-center border">
+                    <h2>Heroes</h2>
+                </div>
+            </div>
+          
+            <!--    Error display 
+            <div class="col-12 m-1 text-center"
+                th:if="${!errors.isEmpty()}">
+                <p class="alert alert-danger" th:each="error : ${errors}"
+                th:text="${error.message}">Error message</p>
+            </div> -->
+         
+            <!-- ADD HERO -->
+            <div class="row m-4 border border-dark">
+                <div class="col-12 m-1 text-center"
+                th:if="${!errors.isEmpty()}">
+                <p class="alert alert-danger" th:each="error : ${errors}"
+                th:text="${error.message}">Error message</p>
+            </div>
+                <div class="col-3 text-center m-3">
+                    <span class="h3">Add Hero</span>
+                </div>
+                <div class="col-7 text-center m-3">
+                    <form action="addHero" method="POST" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label for="name" class="col-3 col-form-label">
+                                Name</label>
+                            <div class="col-9">
+                                <input type="text" name="name" 
+                                       id="name" class="form-control" th:value="${hero.name}"/>
+                                <div th:if="${#fields.hasErrors('hero.name')}">
+                                    <p th:each="error : ${#fields.errors('hero.name')}" class="alert alert-danger" 
+                                        th:text="${error}"> Name errors</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="description" class="col-3 col-form-label">
+                                Description</label>
+                            <div class="col-9">
+                                <input type="text" name="description" 
+                                       id="description" class="form-control" th:value="${hero.description}"/>
+                                <div th:if="${#fields.hasErrors('hero.description')}">
+                                    <p th:each="error : ${#fields.errors('hero.description')}" class="alert alert-danger"
+                                      th:text="${error}"> Description errors </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="powers" class="col-3 col-form-label">
+                                Powers</label>
+                            <div class="col-9">
+                                <select multiple id="powers" name="power_id" 
+                                        class="form-control" >
+                                    <option th:each="power : ${powers}" 
+                                            th:value="${power.id}" 
+                                            th:text="${power.name}">
+                                        Power</option>
+                                </select>                                
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="organizations" class="col-3 col-form-label">
+                                Organizations</label>
+                            <div class="col-9">
+                                <select multiple id="organizations" name="organization_id" 
+                                        class="form-control" >
+                                    <option th:each="organization : ${organizations}" 
+                                            th:value="${organization.id}" 
+                                            th:text="${organization.name}">
+                                        Organization</option>
+                                </select>
+                            </div>
+                        </div>  
+                        
+                        <div class="form-group row">
+                            <label for="heroImage" class="col-3 col-form-label">Hero Image(jpg)</label>
+                            <div class="col-9 text-left">
+                                <input type="file" name="heroImageToSave" 
+                                       id="heroImage" class="file"/>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Add Hero</button>
+                    </form>
+                </div>
+            </div>
+         
+            <!-- Hero Listing -->
+            <div class="row m-4 border border-dark">
+                <div class="col text-center m-3">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Details</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="hero : ${heroes}">
+                                <td th:text="${hero.id}">ID</td>
+                                <td th:text="${hero.name}">Name</td>
+                                <td th:text="${hero.description}">Description</td>
+                                <td><a href="#" th:href="@{/detailHero(id=${hero.id})}">Details</a></td>
+                                <td><a href="#" th:href="@{/editHero(id=${hero.id})}">Edit</a></td>
+                                <td><a href="#" th:href="@{/displayDeleteHero(id=${hero.id})}">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+
+    <!-- End main body -->
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>
